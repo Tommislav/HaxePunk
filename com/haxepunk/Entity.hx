@@ -1,5 +1,6 @@
 package com.haxepunk;
 
+import com.haxepunk.Entity.CollisionInfo;
 import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -24,6 +25,12 @@ typedef FriendEntity = {
 	private var _typePrev:FriendEntity;
 	private var _typeNext:FriendEntity;
 	private var _recycleNext:Entity;
+}
+
+typedef CollisionInfo = {
+	before:Point,
+	check:Point,
+	velocity:Point
 }
 
 /**
@@ -55,6 +62,12 @@ class Entity extends Tweener
 	private inline function set_x(v:Float):Float
 	{
 		return x = v;
+	}
+	
+	private var _collisionInfo:CollisionInfo;
+	@:isVar public var __collisionInfo(get___collisionInfo, null):CollisionInfo;
+	private inline function get___collisionInfo():CollisionInfo {
+		return _collisionInfo;
 	}
 
 	/**
@@ -118,7 +131,7 @@ class Entity extends Tweener
 		followCamera = false;
 		this.x = x;
 		this.y = y;
-
+		
 		originX = originY = 0;
 		width = height = 0;
 		_moveX = _moveY = 0;
@@ -135,6 +148,8 @@ class Entity extends Tweener
 		if (mask != null) this.mask = mask;
 		HITBOX.assignTo(this);
 		_class = Type.getClassName(Type.getClass(this));
+		
+		_collisionInfo = { before: new Point(), check: new Point(), velocity: new Point() };
 	}
 
 	/**
@@ -196,6 +211,14 @@ class Entity extends Tweener
 			fe:FriendEntity = _scene._typeFirst.get(type);
 		if (!collidable || fe == null) return null;
 
+		_collisionInfo.before.x = this.x;
+		_collisionInfo.before.y = this.y;
+		_collisionInfo.check.x = x;
+		_collisionInfo.check.y = y;
+		_collisionInfo.velocity.x = (x - this.x);
+		_collisionInfo.velocity.y = (y - this.y);
+		
+		
 		_x = this.x; _y = this.y;
 		this.x = x; this.y = y;
 
