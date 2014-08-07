@@ -66,8 +66,8 @@ class TmxObject
 			debug_graphic.y = y;
 #end
 		}else{ // rect
-			shapeMask = new CloudHitbox(width, height, x, y);
-			//shapeMask = new com.haxepunk.masks.Hitbox(width, height, x, y);
+			//shapeMask = new CloudHitbox(width, height, x, y);
+			shapeMask = new com.haxepunk.masks.Hitbox(width, height, x, y);
 
 #if debug
 			debug_graphic = com.haxepunk.graphics.Image.createRect(width, height, 0xff0000, .6);

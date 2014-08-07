@@ -6,6 +6,8 @@ import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.display.Stage;
 import flash.display.StageDisplayState;
+import flash.events.EventDispatcher;
+import flash.events.IEventDispatcher;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -67,6 +69,15 @@ class HXP
 #else
 	public static inline var INT_MAX_VALUE = 2147483646;
 #end
+
+	private static var _eventDispatcher:IEventDispatcher;
+	public static var eventDispatcher(default, null):IEventDispatcher;
+	public static inline function get_eventDispatcher():IEventDispatcher {
+		if (_eventDispatcher == null) { _eventDispatcher = new EventDispatcher(); }
+		return _eventDispatcher;
+	}
+
+
 
 	/**
 	 * The color black defined for neko (BitmapInt32) or flash (Int)

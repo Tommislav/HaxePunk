@@ -2,6 +2,7 @@ package com.haxepunk;
 
 import com.haxepunk.Entity.CollisionInfo;
 import flash.display.BitmapData;
+import flash.events.Event;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import com.haxepunk.graphics.Image;
@@ -47,6 +48,7 @@ class Entity extends Tweener
 	 * If the Entity should respond to collision checks.
 	 */
 	public var collidable:Bool;
+	
 
 	/**
 	 * X position of the Entity in the Scene.
@@ -168,6 +170,33 @@ class Entity extends Tweener
 
 	}
 
+	public function wantsToUpdate(cameraBounds:Rectangle):Bool {
+		return true;
+	}
+	
+	// Am I inside bounds of something (like camera)
+	private function isWithinBounds(bounds:Rectangle, margin:Int = 0):Bool {
+		
+		if ((x + width) > (bounds.left - margin) && x < bounds.right + margin) {
+			if ((y + height) > (bounds.top - margin) && y < bounds.bottom + margin) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private function addEventListener(type : String, listener : Dynamic -> Void) : Void {
+		HXP.eventDispatcher.addEventListener(type, listener);
+	}
+	private function removeEventListener(type : String, listener : Dynamic -> Void, useCapture : Bool = false) : Void {
+		HXP.eventDispatcher.removeEventListener(type, listener);
+	}
+	private function dispatchEvent(event : Event) : Bool {
+		return HXP.eventDispatcher.dispatchEvent(event);
+	}
+	
+	
+	
 	/**
 	 * Updates the Entity.
 	 */

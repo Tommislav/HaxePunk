@@ -2,6 +2,7 @@ package com.haxepunk;
 
 import com.haxepunk.graphics.atlas.AtlasData;
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.geom.Point;
 import com.haxepunk.Entity;
 import com.haxepunk.Tweener;
@@ -22,6 +23,8 @@ class Scene extends Tweener
 	 * Point used to determine drawing offset in the render loop.
 	 */
 	public var camera:Point;
+	
+	private var _cameraBounds:Rectangle;
 
 	/**
 	 * Constructor.
@@ -31,6 +34,7 @@ class Scene extends Tweener
 		super();
 		visible = true;
 		camera = new Point();
+		_cameraBounds = new Rectangle();
 		_count = 0;
 
 		_layerList = new Array<Int>();
@@ -91,13 +95,21 @@ class Scene extends Tweener
 	 */
 	override public function update()
 	{
+		if (_cameraBounds == null) {
+			_cameraBounds = new Rectangle();
+		}
+		_cameraBounds.x = camera.x;
+		_cameraBounds.y = camera.y;
+		_cameraBounds.width = HXP.width;
+		_cameraBounds.height = HXP.height;
+		
 		// update the entities
 		var e:Entity,
 			fe:FriendEntity = _updateFirst;
 		while (fe != null)
 		{
 			e = cast(fe, Entity);
-			if (e.active)
+			if (e.active && e.wantsToUpdate(_cameraBounds))
 			{
 				if (e.hasTween) e.updateTweens();
 				e.update();
@@ -1356,6 +1368,17 @@ class Scene extends Tweener
 		}
 		if (py > ry) return squarePoints(px, py, rx, ry + rh);
 		return squarePoints(px, py, rx, ry);
+	}
+	
+	
+	private function addEventListener(type : String, listener : Dynamic -> Void) : Void {
+		HXP.eventDispatcher.addEventListener(type, listener);
+	}
+	private function removeEventListener(type : String, listener : Dynamic -> Void, useCapture : Bool = false) : Void {
+		HXP.eventDispatcher.removeEventListener(type, listener);
+	}
+	private function dispatchEvent(event : Event) : Bool {
+		return HXP.eventDispatcher.dispatchEvent(event);
 	}
 
 	// Adding and removal.
