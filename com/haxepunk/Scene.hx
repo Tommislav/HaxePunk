@@ -95,9 +95,6 @@ class Scene extends Tweener
 	 */
 	override public function update()
 	{
-		if (_cameraBounds == null) {
-			_cameraBounds = new Rectangle();
-		}
 		_cameraBounds.x = camera.x;
 		_cameraBounds.y = camera.y;
 		_cameraBounds.width = HXP.width;
@@ -139,6 +136,11 @@ class Scene extends Tweener
 			AtlasData.setScene(this);
 		}
 
+		_cameraBounds.x = camera.x;
+		_cameraBounds.y = camera.y;
+		_cameraBounds.width = HXP.width;
+		_cameraBounds.height = HXP.height;
+		
 		// render the entities in order of depth
 		var e:Entity,
 			fe:FriendEntity,
@@ -149,7 +151,7 @@ class Scene extends Tweener
 			while (fe != null)
 			{
 				e = cast(fe, Entity);
-				if (e.visible) e.render();
+				if (e.visible && e.wantsToRender(_cameraBounds)) e.render();
 				fe = fe._renderPrev;
 			}
 		}

@@ -170,6 +170,11 @@ class Entity extends Tweener
 
 	}
 
+	/**
+	 * Can be overridden and adjust if update() should be run based on distance from camera
+	 * @param	cameraBounds the x,y,widht and height of the current camera
+	 * @return	false if we should skip update
+	 */
 	public function wantsToUpdate(cameraBounds:Rectangle):Bool {
 		return true;
 	}
@@ -203,6 +208,11 @@ class Entity extends Tweener
 	override public function update():Void
 	{
 
+	}
+	
+	
+	public function wantsToRender(cameraBounds:Rectangle):Bool {
+		return true;
 	}
 
 	/**
