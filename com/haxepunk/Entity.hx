@@ -1,5 +1,6 @@
 package com.haxepunk;
 
+import com.haxepunk.ai.behaviors.Selector;
 import com.haxepunk.Entity.CollisionInfo;
 import flash.display.BitmapData;
 import flash.events.Event;
@@ -207,7 +208,9 @@ class Entity extends Tweener
 	 */
 	override public function update():Void
 	{
-
+		if (behaviorTree != null) {
+			behaviorTree.tick(this);
+		}
 	}
 	
 	
@@ -1029,4 +1032,6 @@ class Entity extends Tweener
 	private var _graphic:Graphic;
 	private var _point:Point;
 	private var _camera:Point;
+	
+	private var behaviorTree:Selector;
 }
