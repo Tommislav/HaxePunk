@@ -199,9 +199,9 @@ class AtlasData
 	 */
 	public inline function createRegion(rect:Rectangle, ?center:Point):AtlasRegion
 	{
-		var r = new Rectangle();
+		var r = new Rectangle(rect.x, rect.y, rect.width, rect.height);
 		var p = center != null ? new Point(center.x, center.y) : null;
-		r.copyFrom(rect);
+		//r.copyFrom(rect);
 		var tileIndex = _tilesheet.addTileRect(r, p);
 		return new AtlasRegion(this, tileIndex, rect);
 	}
